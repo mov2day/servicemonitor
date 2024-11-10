@@ -8,6 +8,16 @@ export interface Service {
   category?: string;
 }
 
+export interface Config {
+  refreshInterval: number;
+  defaultTimeout: number;
+}
+
+export const config: Config = {
+  refreshInterval: 30000, // 30 seconds in milliseconds
+  defaultTimeout: 5000,   // 5 seconds in milliseconds
+};
+
 export const services: Service[] = [
   {
     id: 'api-gateway',

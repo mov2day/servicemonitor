@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { Service } from '../config/services';
+import { config } from '../config/services';
 
 export interface ServiceHealth {
   status: 'healthy' | 'unhealthy' | 'loading';
@@ -20,7 +21,7 @@ export const useServiceHealth = (service: Service) => {
       const startTime = performance.now();
       try {
         const response = await fetch(service.endpoint, {
-          signal: AbortSignal.timeout(service.timeout || 5000),
+          signal: AbortSignal.timeout(service.timeout || config.defaultTimeout),
         });
         
         const latency = performance.now() - startTime;
@@ -42,7 +43,7 @@ export const useServiceHealth = (service: Service) => {
     };
 
     checkHealth();
-    const interval = setInterval(checkHealth, 30000);
+    const interval = setInterval(checkHealth, config.refreshInterval);
     return () => clearInterval(interval);
   }, [service]);
 
