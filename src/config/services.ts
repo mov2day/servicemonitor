@@ -14,7 +14,7 @@ export interface Config {
 }
 
 export const config: Config = {
-  refreshInterval: 30000, // 30 seconds in milliseconds
+  refreshInterval: 60000, // 30 seconds in milliseconds
   defaultTimeout: 5000,   // 5 seconds in milliseconds
 };
 
@@ -44,7 +44,7 @@ export const services: Service[] = [
     id: 'user-service',
     name: 'User Management',
     description: 'User Data Service',
-    endpoint: 'https://users.example.com/health',
+    endpoint: 'https://73580dd2b41e46bdb203f8dc0ef8bb87.api.mockbin.io/',
     category: 'Core',
   },
 ];
