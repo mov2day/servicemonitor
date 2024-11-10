@@ -1,7 +1,8 @@
 import React from 'react';
-import { Activity, CheckCircle2, XCircle, Clock } from 'lucide-react';
+import { Activity, CheckCircle2, XCircle, Clock, MessageSquare } from 'lucide-react';
 import type { Service } from '../config/services';
 import { useServiceHealth } from '../hooks/useServiceHealth';
+import { config } from '../config/services';
 
 interface ServiceCardProps {
   service: Service;
@@ -29,10 +30,20 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
           <h3 className="text-lg font-semibold text-gray-900">{service.name}</h3>
           <p className="text-sm text-gray-500 mt-1">{service.description}</p>
         </div>
-        <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${statusColor}`}>
-          <StatusIcon className="w-4 h-4 mr-1" />
-          {health.status}
-        </span>
+        <div className="flex items-center space-x-2">
+          {config.notifications.enabled && (
+            <span 
+              className="text-gray-400" 
+              title={`${config.notifications.platform.charAt(0).toUpperCase() + config.notifications.platform.slice(1)} notifications enabled`}
+            >
+              <MessageSquare className="w-4 h-4" />
+            </span>
+          )}
+          <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${statusColor}`}>
+            <StatusIcon className="w-4 h-4 mr-1" />
+            {health.status}
+          </span>
+        </div>
       </div>
       
       <div className="mt-4 space-y-2">

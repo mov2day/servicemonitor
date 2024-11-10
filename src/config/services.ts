@@ -8,15 +8,34 @@ export interface Service {
   category?: string;
 }
 
+export type NotificationPlatform = 'teams' | 'slack';
+
+export interface NotificationConfig {
+  enabled: boolean;
+  platform: NotificationPlatform;
+  webhookUrl?: string;
+  retryInterval: number;  // How often to retry sending notifications in ms
+  cooldown: number;       // Time to wait before sending another notification for the same service
+}
+
 export interface Config {
   refreshInterval: number;
   defaultTimeout: number;
+  notifications: NotificationConfig;
 }
 
 export const config: Config = {
-  refreshInterval: 60000, // 30 seconds in milliseconds
+  refreshInterval: 30000, // 30 seconds in milliseconds
   defaultTimeout: 5000,   // 5 seconds in milliseconds
+  notifications: {
+    enabled: true,
+    platform: 'slack',    // or 'teams'
+    webhookUrl: 'WEBHOOK_URL',
+    retryInterval: 300000, // 5 minutes
+    cooldown: 1800000,    // 30 minutes
+  }
 };
+
 
 export const services: Service[] = [
   {
