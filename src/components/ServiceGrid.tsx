@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { services } from '../config/services';
-import { ServiceCard } from './ServiceCard';
+import ServiceCard from './ServiceCard';
 
-export const ServiceGrid: React.FC = () => {
+const ServiceGrid: React.FC = () => {
   const categories = useMemo(() => {
     const cats = new Set(services.map(s => s.category || 'Other'));
     return Array.from(cats);
@@ -25,3 +25,5 @@ export const ServiceGrid: React.FC = () => {
     </div>
   );
 };
+
+export default ServiceGrid;

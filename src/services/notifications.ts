@@ -47,7 +47,6 @@ function createNotificationPayload(service: Service, error: string): Notificatio
       }]
     },
     slack: {
-        "text": `*Service Alert: ${service.name} is down*`,
       "blocks": [
         {
           "type": "header",

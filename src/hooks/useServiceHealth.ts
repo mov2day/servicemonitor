@@ -1,17 +1,10 @@
 import { useState, useEffect } from 'react';
-import type { Service } from '../config/services';
+import type { Service, HealthStatus } from '../lib/types';
+import { checkServiceHealth } from '../lib/api';
 import { config } from '../config/services';
-import { sendNotification } from '../services/notifications';
 
-export interface ServiceHealth {
-  status: 'healthy' | 'unhealthy' | 'loading';
-  latency: number;
-  lastChecked: Date;
-  error?: string;
-}
-
-export const useServiceHealth = (service: Service) => {
-  const [health, setHealth] = useState<ServiceHealth>({
+export function useServiceHealth(service: Service) {
+  const [health, setHealth] = useState<HealthStatus>({
     status: 'loading',
     latency: 0,
     lastChecked: new Date(),
@@ -19,36 +12,16 @@ export const useServiceHealth = (service: Service) => {
 
   useEffect(() => {
     const checkHealth = async () => {
-      const startTime = performance.now();
       try {
-        const response = await fetch(service.endpoint, {
-          signal: AbortSignal.timeout(service.timeout || config.defaultTimeout),
-        });
-        
-        const latency = performance.now() - startTime;
-        const isHealthy = response.ok;
-        const error = isHealthy ? undefined : `Status: ${response.status}`;
-        
-        setHealth({
-          status: isHealthy ? 'healthy' : 'unhealthy',
-          latency,
-          lastChecked: new Date(),
-          error,
-        });
-
-        if (!isHealthy && error) {
-          sendNotification(service, error);
-        }
+        const data = await checkServiceHealth(service);
+        setHealth(data);
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         setHealth({
           status: 'unhealthy',
-          latency: performance.now() - startTime,
+          latency: 0,
           lastChecked: new Date(),
-          error: errorMessage,
+          error: error instanceof Error ? error.message : 'Unknown error',
         });
-        
-        sendNotification(service, errorMessage);
       }
     };
 
@@ -58,4 +31,4 @@ export const useServiceHealth = (service: Service) => {
   }, [service]);
 
   return health;
-};
+}

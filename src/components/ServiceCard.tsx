@@ -8,7 +8,7 @@ interface ServiceCardProps {
   service: Service;
 }
 
-export const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
+const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
   const health = useServiceHealth(service);
 
   const statusColor = {
@@ -65,3 +65,5 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
     </div>
   );
 };
+
+export default ServiceCard;
